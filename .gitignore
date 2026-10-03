@@ -135,6 +135,9 @@ env.bak/
 venv.bak/
 lc-academy-env/
 
+# LangGraph dev server local state
+.langgraph_api/
+
 # Spyder project settings
 .spyderproject
 .spyproject
