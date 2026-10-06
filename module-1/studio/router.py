@@ -1,6 +1,7 @@
-from langchain_openai import ChatOpenAI
-from langgraph.graph import MessagesState
-from langgraph.graph import StateGraph, START, END
+from langchain_anthropic import ChatAnthropic
+
+from langgraph.graph import MessagesState  # pyright: ignore[reportMissingTypeStubs]
+from langgraph.graph import StateGraph, START, END  # pyright: ignore[reportMissingTypeStubs]
 from langgraph.prebuilt import ToolNode, tools_condition
 
 # Tool
@@ -14,8 +15,13 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 # LLM with bound tool
-llm = ChatOpenAI(model="gpt-4o")
-llm_with_tools = llm.bind_tools([multiply])
+llm = ChatAnthropic(
+    model_name="claude-haiku-4-5-20251001",
+    timeout=None,
+    stop=None,
+    temperature=0,
+)
+llm_with_tools = llm.bind_tools([multiply]) # pyright: ignore[reportUnknownMemberType]
 
 # Node
 def tool_calling_llm(state: MessagesState):
@@ -23,8 +29,8 @@ def tool_calling_llm(state: MessagesState):
 
 # Build graph
 builder = StateGraph(MessagesState)
-builder.add_node("tool_calling_llm", tool_calling_llm)
-builder.add_node("tools", ToolNode([multiply]))
+builder.add_node("tool_calling_llm", tool_calling_llm) # pyright: ignore[reportUnknownMemberType]
+builder.add_node("tools", ToolNode([multiply]))  # pyright: ignore[reportUnknownMemberType]
 builder.add_edge(START, "tool_calling_llm")
 builder.add_conditional_edges(
     "tool_calling_llm",
@@ -35,4 +41,4 @@ builder.add_conditional_edges(
 builder.add_edge("tools", END)
 
 # Compile graph
-graph = builder.compile()
+graph = builder.compile() # pyright: ignore[reportUnknownMemberType]
